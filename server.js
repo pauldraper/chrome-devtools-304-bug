@@ -3,9 +3,11 @@ const { createServer } = require("node:http");
 
 const html = `
 <!doctype html>
-Hello world
-<script src="/test"></script>
-<script src="http://localhost:8001/test"></script>
+<div id="message"></div>
+<script>
+  fetch("/test");
+  fetch("http://localhost:8001/test");
+</script>
 `.trim();
 
 const cacheKey = Math.floor(Math.random() * Math.pow(2, 32)).toString(16);
@@ -25,8 +27,8 @@ const handler = async (req, res) => {
       }
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("ETag", `"${cacheKey}"`);
-      res.setHeader("Content-Type", "text/javascript");
-      res.end();
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ message: "Hello World!" }));
       console.log("200");
       break;
   }
